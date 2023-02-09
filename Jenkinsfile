@@ -12,7 +12,7 @@ pipeline {
         stage('run step') {
             steps {
                 script {
-                    sh "docker run -tid -p 9090:9090 my-image:${env.BUILD_ID}"
+                    sh "docker run -tid -p 80:80 my-image:${env.BUILD_ID}"
                 }
             }
         }
