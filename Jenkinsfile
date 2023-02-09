@@ -4,7 +4,7 @@ pipeline {
         stage('build step') {
             steps {
                 script {
-                    def costumImage = docker.build("my-image:${env.BUILD_ID}",)
+                    def costumImage = docker.build("my-image:${env.BUILD_ID}")
                 }
             }
         }
