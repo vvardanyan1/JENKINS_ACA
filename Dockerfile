@@ -1,3 +1,3 @@
 FROM ubuntu:latest
 RUN apt-get update && apt-get install nginx -y
-CMD ["nginx", "-g", "deamon off;"]
+CMD ["nginx", "-g", "deamon off", "/bin/bash;"]
