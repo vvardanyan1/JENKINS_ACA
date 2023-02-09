@@ -8,5 +8,14 @@ pipeline {
                 }
             }
         }
+
+        stage('run step') {
+            steps {
+                script {
+                    docker.image("my-image:${env.BUILD_ID}").run('-p 80:80') { 
+                    }
+                }
+            }
+        }
     }
 }
