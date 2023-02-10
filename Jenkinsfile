@@ -12,7 +12,7 @@ pipeline {
     }
 
     stages {
-        stage('build step') {
+        stage('build') {
             steps {
                 script {
                     def costumImage = docker.build("${DOCKER_USER}/my-image:${env.BUILD_ID}", "-f Dockerfile .")
@@ -36,7 +36,7 @@ pipeline {
             }
         }
 
-        stage('run step') {
+        stage('deploy to remote server') {
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'SSH_USER', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
