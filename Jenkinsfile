@@ -9,7 +9,7 @@ pipeline {
         stage('build step') {
             steps {
                 script {
-                    def costumImage = docker.build("my-image:${env.BUILD_ID}", "-f Dockerfile .")
+                    def costumImage = docker.build("${DOCKER_USER}/my-image:${env.BUILD_ID}", "-f Dockerfile .")
                 }
             }
         }
