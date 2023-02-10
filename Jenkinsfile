@@ -1,8 +1,3 @@
-def remote = [:]
-remote.name = "deploy1"
-remote.host = "35.174.211.107"
-remote.allowAnyHosts = true
-
 pipeline {
     agent any
     
@@ -39,7 +34,12 @@ pipeline {
         stage('deploy to remote server') {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'SSH_USER', keyFileVariable: 'identity', passphraseVariable: "", usernameVariable: 'userName')]) {
+                    def remote = [:]
+                    remote.name = "deploy1"
+                    remote.host = "35.174.211.107"
+                    remote.allowAnyHosts = true
+
+                    withCredentials([sshUserPrivateKey(credentialsId: 'SSH_USER', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
                     remote.user = userName
                     remote.identityFile = identity
                     sshCommand remote: remote, command: '''
