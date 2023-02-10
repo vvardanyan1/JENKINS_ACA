@@ -1,10 +1,16 @@
+def remote = [:]
+remote.name = "deploy1"
+remote.host = "35.174.211.107"
+remote.allowAnyHosts = true
+
 pipeline {
     agent any
-
+    
     environment {
         DOCKER_USER = credentials('DOCKER_USER')
         DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
     }
+
     stages {
         stage('build step') {
             steps {
@@ -30,12 +36,21 @@ pipeline {
             }
         }
 
-        // stage('run step') {
-        //     steps {
-        //         script {
-        //             sh "docker run -tid -p 80:80 my-image:${env.BUILD_ID}"
-        //         }
-        //     }
-        // }
+        stage('run step') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'SSH_USER', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
+                    remote.user = userName
+                    remote.identityFile = identity
+                    sshCommand remote: remote, command: '''
+                        if docker ps |grep 'nginx-app'; then
+                            docker rm -f nginx-app
+                        fi
+                    '''
+                    sshCommand remote: remote, command: "docker run -tid -p 80:80 --name nginx-app ${DOCKER_USER}/my-image:${env.BUILD_ID}"
+                }
+            }
+        }
     }
+}
 }
